@@ -6,13 +6,19 @@ const app = exprees()
 app.listen(PUERTO)
 
 //MiDDleware
-app.use(exprees.json())
 
-  
+
+   const mid1 = (req , res,next)=> {
+    console.log ('se ejecuto el middleware')
+    next()
+   }
+   const mid2 = (req , res,next)=> {
+    console.log ('se ejecuto el middleware2')
+    next()
+   }
    //app.use('/', mid1)
-   //esto sirve para una web estatica 
-    app.use(exprees.static('./web'))
-
+    app.use('/saludo' , mid1)
+    
    
     app.get('/',(req,res)=>{
         console.log('/')
@@ -23,6 +29,3 @@ app.use(exprees.json())
         console.log('/saludo')
         res.end()
     })
- app.post('/',(req,res)=>{
-    res.end
- })
