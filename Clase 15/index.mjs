@@ -3,8 +3,9 @@ import dotenv from 'dotenv';
 import rutasModuloProductos from "./modulos/productos/productos.rutas.mjs";
 
 dotenv.config()
-console.log(process.env)
-const PUERTO = 3000;
+//console.log(process.env)
+
+const PUERTO = process.env.PUERTO ||3000
 
 
 
