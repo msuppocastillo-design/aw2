@@ -1,5 +1,4 @@
-const productos = 
-[
+const productos = [
   {
     "id": 1,
     "franquicia": "Atlanta Hawks",
@@ -242,4 +241,4 @@ const productos =
   }
 ]
 
-export default productos 
+export default productos
