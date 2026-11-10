@@ -5,7 +5,8 @@
 CREATE TABLE productos (
     id SERIAL PRIMARY KEY,
     producto VARCHAR(100),
-    precio NUMERIC(10, 2)
+    precio NUMERIC(10, 2),
+    imagen VARCHAR(255) NULL
 );
 
 -- Insertar 10 productos deportivos

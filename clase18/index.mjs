@@ -1,47 +1,53 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import multer from 'multer'
 import path from 'node:path'
+import multer from 'multer'
 import pool from './conexion.bd.mjs'
-import { error } from 'node:console'
 
 dotenv.config()
 
-
 const PUERTO = process.env.PUERTO || 3000
+
+// Basico
+const subirArchivos = multer({
+    dest: path.resolve('archivos')
+}).single('archivo')
+// const gestionarArchivos = subirArchivos.single('archivo')
+
 const app = express()
 
-const subirarchivos = multer({
-    dest: path.resolve('archivo')
-}).single('archivo')
-
-//subirarchivos.singler('archivo')
-
-app.post('/subir', (req,res)=>(
-    subirarchivos(req,res,async (error)=>{
-        if(error){
-            // si la imagen no se pudo subir 
-            return res.status(500).json({mensaje:'no se pudo subir la imagen'})
+app.post('/subir', (req, res) => {
+    subirArchivos(req, res, async (error) => {
+        if (error) {
+            // Error no pasanada
+            return res.status(500).json({ mensaje: 'No se pudo subir la imagen' })
         }
         try{
-            
-            await pool.query('INSERT INTO producto(producto.precio.imagen)VALUE($1,$2,$3)',[req.body.prodcto,req.destroyed.precio, req.body.filaname])
+            // console.log(req.file)
+            const resultado = await pool.query(`
+                INSERT INTO productos
+                (producto, precio, imagen)
+                VALUES($1, $2, $3)`,
+                [
+                    req.body.producto, 
+                    req.body.precio, 
+                    req.file.filename
+                ])
             
         }catch(error){
-            // hay que borrar la imagen error en la BD
-            // responder con res.. status..
-            console.log(error)
+            // Borrar imagen si hubo un problema en la BD
+            // respondemos acá con res..status ..
         }
-        res.json({mensaje: 'se guardo'})
+        res.json({ mensaje: 'Datos cargados' })
     })
-    
-   
-))
+})
 
-
-app.use(express.static(path.resolve('publico')))
-app.use('/archivo',express.static(path.resolve('archivo')))
-
+app.use(express.static(path.resolve('publica')))
+app.use('/archivos',express.static(path.resolve('archivos')))
 
 
 app.listen(PUERTO)
+
+
+
+
